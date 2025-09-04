@@ -1,4 +1,4 @@
-import { useUserStore } from "@/store/AuthSlice";
+import { useUserStore } from "@/store/userStore";
 import { Navigate } from "react-router-dom";
 
 const withAdminGuard = (Component: React.FC) => {
