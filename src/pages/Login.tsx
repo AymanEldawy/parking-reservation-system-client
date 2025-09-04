@@ -2,6 +2,7 @@ import ErrorMessage from "@/components/shared/ErrorMessage";
 import { useUserStore } from "@/store/userStore";
 import type { UserLoginType } from "@/types/user.type";
 import { useForm } from "react-hook-form"
+import { toast } from "react-toastify";
 
 const Login = () => {
   const {
@@ -18,12 +19,9 @@ const Login = () => {
 
   const onSubmit = async (data: UserLoginType) => {
     const response = await login(data)
-    console.log(response);
-    if (response.status === 401) {
-      console.log(response, response.data);
-
+    if (response.data.status === 'error') {
+      toast.error(response.data.message)
     }
-
   }
 
   return (
