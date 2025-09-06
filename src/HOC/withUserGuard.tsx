@@ -3,14 +3,15 @@ import { Navigate } from "react-router-dom";
 
 export const withUserGuard = (Component: React.FC) => {
   const Wrapper: React.FC = (props) => {
+    const pathname = window.location.pathname;
     const { user, token } = useUserStore();
 
-    if (!user || !token) {
-      return <Navigate to="/login" replace />;
+    if (user && user.role !== "employee") {
+      return <Navigate to="/admin" replace />;
     }
 
-    if (user.role !== "employee") {
-      return <Navigate to="/admin" replace />;
+    if ((!user || !token) && pathname === '/checkout') {
+      return <Navigate to="/login" replace />;
     }
 
     return <Component {...props} />;
