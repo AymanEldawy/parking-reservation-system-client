@@ -8,7 +8,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { MasterService, TicketService } from '@/services/api';
-import QUERY_KEYS from '@/data/queryKayes';
+import QUERY_KEYS from '@/data/queryKays';
 import { ws } from '@/services/ws';
 import type { ZoneType } from '@/types/zone.type';
 import ZoneCard from '@/components/ZoneCard';

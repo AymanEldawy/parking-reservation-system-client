@@ -1,5 +1,5 @@
 import GateCard from "@/components/GateCard";
-import QUERY_KEYS from "@/data/queryKayes";
+import QUERY_KEYS from "@/data/queryKays";
 import { MasterService } from "@/services/api";
 import type { GateType } from "@/types/gate.type";
 import { useQuery } from "@tanstack/react-query"
