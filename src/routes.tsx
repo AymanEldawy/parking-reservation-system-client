@@ -6,8 +6,8 @@ import ControlPanel from "@/pages/admin/ControlPanel";
 import Subscriptions from "@/pages/admin/Subscriptions";
 import ParkingStateReport from "@/pages/admin/ParkingStateReport";
 import Gates from "@/pages/employee/Gates";
-import SingleGate from "@/pages/employee/SingleGate";
 import Checkpoint from "@/pages/employee/Checkpoint";
+import Zones from "@/pages/employee/Zones";
 
 const routes: RouteObject[] = [
   {
@@ -23,12 +23,12 @@ const routes: RouteObject[] = [
   {
     path: "/",
     children: [
+      { index: true, element: <Gates /> },
       {
         path: 'gates',
         // element: <Gates />,
         children: [
-          { index: true, element: <Gates /> },
-          { path: ':id', element: <SingleGate /> }
+          { path: ':id', element: <Zones /> }
         ],
       },
       {
@@ -43,7 +43,7 @@ const routes: RouteObject[] = [
     children: [
       { path: '/login', element: <Login /> },
     ],
-    element: <EmployeeLayout />,
+    // element: <EmployeeLayout />,
   },
 ];
 
