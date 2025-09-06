@@ -1,28 +1,52 @@
 import ErrorMessage from "@/components/shared/ErrorMessage";
 import { useUserStore } from "@/store/userStore";
-import type { UserLoginType } from "@/types/user.type";
+import type { UserLoginType, UserType } from "@/types/user.type";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Login = () => {
+  const { login, user } = useUserStore();
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm<UserLoginType>({
     defaultValues: {
+      // username: "emp1",
+      // password: "pass1"
       username: "superadmin",
       password: "superpass"
     }
   });
-  const login = useUserStore((state) => state.login);
 
-  const onSubmit = async (data: UserLoginType) => {
-    const response = await login(data)
-    if (response.data.status === 'error') {
-      toast.error(response.data.message)
+  useEffect(() => {
+    if (user) {
+      navigate('/')
     }
-  }
+  }, [user, navigate]);
+
+
+  // const onSubmit = async (data: UserLoginType) => {
+  //   const response = await login<{ user: UserType, token: string } | { message: string; status: 'error' }>(data);
+  //   if ('status' in response && response.status === 'error') {
+  //     toast.error(response.message);
+  //   } else {
+  //     navigate('/');
+  //   }
+  // };
+  const onSubmit = async (values: UserLoginType) => {
+    const data = await login(values);
+    if (data && data.status === 'error') {
+      toast.error(data.message);
+      return;
+    } else {
+      navigate('/');
+    }
+  };
+
 
   return (
     <main className="flex flex-1 items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
