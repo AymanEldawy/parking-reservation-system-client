@@ -11,10 +11,12 @@ export const useUserStore = create<UserStoreType>()(
       loading: false,
       error: null,
       login: async (user: UserLoginType) => {
-        const response = await AuthService.login(user);
-        if (response.statusText === 'OK')
-          set({ user: response.data.user, token: response.data.token });
-        return response
+        const data = await AuthService.login(user);
+        console.log(data, 'dasdasdas');
+
+        if (data.status !== 'error')
+          set({ user: data.user, token: data.token });
+        return data
       },
       logout: () => {
         set({ user: null, token: null, });
