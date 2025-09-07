@@ -1,8 +1,14 @@
-import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import type { ZoneType } from '@/types/zone.type';
 
-const ZoneCard = ({ zone, setSelectedZone, selectedZone }: { zone: ZoneType, selectedZone: ZoneType | undefined, setSelectedZone: (zone: ZoneType) => void, gateId: string | undefined }) => {
+type ZoneCardProps = {
+  zone: ZoneType,
+  selectedZone: ZoneType | undefined,
+  setSelectedZone: (zone: ZoneType) => void,
+  gateId: string | undefined
+}
+
+const ZoneCard = ({ zone, setSelectedZone, selectedZone }: ZoneCardProps) => {
   const isZoneDisabled = !zone.open || zone.availableForVisitors <= 0;
 
   const handleSelectZone = () => {
