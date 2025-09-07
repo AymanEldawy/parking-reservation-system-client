@@ -17,8 +17,8 @@ const GateCard = ({ gate }: { gate: GateType }) => {
           {gate.location}
         </CardDescription>
       </CardHeader>
-      <Button variant="link" asChild className="btn btn-primary">
-        <Link to={`/gates/${gate.id}`}>Open gate</Link>
+      <Button variant="link" asChild className="btn btn-primary hover:!text-white">
+        <Link to={`/gates/${gate.id}?gate=${gate.name}`}>Open gate</Link>
       </Button>
     </Card>
   )
