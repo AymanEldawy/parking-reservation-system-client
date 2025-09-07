@@ -40,7 +40,7 @@ const EmployeeFormModal = ({ open, setOpen, defaultValue, setSelectedUser }: Emp
     if (defaultValue && data.id) {
       updateUser(data.id, data);
     } else {
-      addUser({ id: Date.now().toString(), name: data.name, role: data.role });
+      addUser({ id: Date.now().toString(), name: data.name, role: data.role, status: data.status });
     }
     reset();
     toast.success('User added successfully');
