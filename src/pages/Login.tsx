@@ -1,17 +1,14 @@
 import ErrorMessage from "@/components/shared/ErrorMessage";
-
 import { useAuthStore } from "@/store/authStore";
 import type { UserLoginType } from "@/types/user.type";
-import { useUserStore } from "@/store/userStore";
-import type { UserLoginType, UserType } from "@/types/user.type";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { login, user } = useUserStore();
+  const { login, user, token } = useAuthStore();
   const navigate = useNavigate();
+
   const {
     handleSubmit,
     register,
@@ -24,9 +21,8 @@ const Login = () => {
       password: "pass1"
     }
   });
-  const navigate = useNavigate()
-  const { user, token, login } = useAuthStore();
-  if(user && token) navigate('/') 
+
+  if (user && token) navigate('/')
 
   const onSubmit = async (values: UserLoginType) => {
     const data = await login(values);
