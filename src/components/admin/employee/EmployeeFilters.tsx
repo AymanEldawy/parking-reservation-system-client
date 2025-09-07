@@ -1,6 +1,12 @@
 import type { EmployeeFiltersType } from "@/types/user.type"
 
-const EmployeeFilters = ({ onFiltersChange, userFilters }: { onFiltersChange: (filters: EmployeeFiltersType) => void, userFilters: EmployeeFiltersType }) => {
+
+type EmployeeFiltersProps = {
+  onFiltersChange: (filters: EmployeeFiltersType) => void;
+  userFilters: EmployeeFiltersType;
+}
+
+const EmployeeFilters = ({ onFiltersChange, userFilters }: EmployeeFiltersProps) => {
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-6">
       <div className="relative flex-grow">
@@ -17,7 +23,8 @@ const EmployeeFilters = ({ onFiltersChange, userFilters }: { onFiltersChange: (f
           onChange={(e) => onFiltersChange({ ...userFilters, search: e.target.value })}
           type="search"
           className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md bg-white text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent transition duration-300 ease-in-out"
-          placeholder="Search employees..."
+          placeholder="Search employees"
+          data-testid="search"
         />
       </div>
       <div className="flex items-center gap-4">

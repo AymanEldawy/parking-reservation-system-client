@@ -14,7 +14,7 @@ type ZoneFormProps = {
 
 
 const ZoneForm = () => {
-  const { register, setValue, watch, handleSubmit } = useForm<ZoneFormProps>();
+  const { register, setValue, watch, handleSubmit, formState: { isDirty } } = useForm<ZoneFormProps>();
   const queryClient = useQueryClient();
 
 
@@ -92,7 +92,7 @@ const ZoneForm = () => {
         </div>
         <div className="flex gap-4">
           <Button
-            type="submit"
+            disabled={!isDirty}
             className=' btn-blue !rounded-md !text-base'>
             Save
           </Button>

@@ -1,4 +1,4 @@
-const HTTP_BASE = "http://localhost:3000/api/v1";
+const HTTP_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
 const defaultHeaders = {
   "Content-Type": "application/json",
@@ -23,9 +23,6 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     ...options,
     headers: getAuthHeaders(),
   });
-  // if (!response.ok) {
-  //   throw new Error(`HTTP error! status: ${response.status}`);
-  // }
   return response.json();
 };
 

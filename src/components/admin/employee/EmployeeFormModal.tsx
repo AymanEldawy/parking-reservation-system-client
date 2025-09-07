@@ -29,9 +29,7 @@ const EmployeeFormModal = ({ open, setOpen, defaultValue, setSelectedUser }: Emp
   } = useForm<EmployeeType>({
     defaultValues: defaultValue || defaultValues
   });
-  console.log(defaultValue, 'defaultValue');
   
-
   const onSubmit = async (data: EmployeeType) => {
     if (!data.name || !data.role) {
       toast.error('Please fill all the fields');
@@ -56,7 +54,7 @@ const EmployeeFormModal = ({ open, setOpen, defaultValue, setSelectedUser }: Emp
     <Dialog open={open} onOpenChange={handleCloseForm}>
       <DialogContent className='bg-white'>
         <h2 className="mb-6 text-center text-2xl font-semibold text-[var(--text-primary)]">Add New User</h2>
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} name="employee-form">
           <div className="space-y-1.5">
             <label className="sr-only" htmlFor="name">Username</label>
             <input

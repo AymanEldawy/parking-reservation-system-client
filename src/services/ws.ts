@@ -5,38 +5,20 @@ type WSMessage =
 
 type Listener = (data: unknown) => void;
 
-function buildWsUrl(): string {
-    return "ws://localhost:3000/api/v1/ws";
-  // if you serve your frontend from another host/origin, feel free to hardcode:
-  // return "ws://localhost:3000/api/v1/ws";
-  if (typeof window === "undefined") return "ws://localhost:3000/api/v1/ws";
-  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  const host = window.location.hostname || "localhost";
-  const port =
-    window.location.port && window.location.port !== ""
-      ? `:${window.location.port}`
-      : ":3000"; // fallback for local dev
-  return `${protocol}//${host}${port}/api/v1/ws`;
-}
-
 class WSService {
-   socket: WebSocket | null = null;
-   url: string = buildWsUrl();
+  socket: WebSocket | null = null;
+  url: string = import.meta.env.VITE_WS_URL || "ws://localhost:3000/api/v1/ws";
+  backoffMs = 500;
 
-  // listeners map by event type
-   listeners: Map<string, Set<Listener>> = new Map();
+  listeners: Map<string, Set<Listener>> = new Map();
 
-  // remember gate subscriptions to re-subscribe after reconnect
-   gateSubs: Set<string> = new Set();
+  gateSubs: Set<string> = new Set();
 
-  // reconnect handling
-   reconnecting = false;
-   backoffMs = 500; // start 0.5s
-   readonly backoffMax = 8000;
+  reconnecting = false;
+  readonly backoffMax = 8000;
 
-  // heartbeat
-   pingTimer: number | null = null;
-   readonly pingEveryMs = 25000;
+  pingTimer: number | null = null;
+  readonly pingEveryMs = 25000;
 
   connect() {
     if (
@@ -53,7 +35,6 @@ class WSService {
       this.reconnecting = false;
       this.backoffMs = 500;
       this.startHeartbeat();
-      // re-subscribe to gates after reconnect
       this.gateSubs.forEach((gateId) =>
         this._send({ type: "subscribe", payload: { gateId } })
       );
@@ -64,16 +45,14 @@ class WSService {
       let data: WSMessage | null = null;
       try {
         data = JSON.parse(ev.data);
-      } catch {
-        // ignore non-JSON
-      }
+      } catch {}
       if (!data || typeof data.type !== "string") {
         this._emit("message", ev.data);
         return;
       }
-      // forward to specific channels
+
       this._emit(data.type, data.payload);
-      // and also generic
+
       this._emit("message", data);
     });
 
@@ -85,7 +64,6 @@ class WSService {
 
     this.socket.addEventListener("error", (err) => {
       this._emit("error", err);
-      // allow close handler to manage reconnect
     });
   }
 
@@ -106,7 +84,7 @@ class WSService {
     this.listeners.get(event)?.delete(handler);
   }
 
-   _emit(event: string, payload: any) {
+  _emit(event: string, payload: any) {
     const set = this.listeners.get(event);
     if (!set) return;
     set.forEach((fn) => {
@@ -118,7 +96,7 @@ class WSService {
     });
   }
 
-   _send(obj: any) {
+  _send(obj: any) {
     const sendIt = () => this.socket?.send(JSON.stringify(obj));
     if (this.socket?.readyState === WebSocket.OPEN) {
       sendIt();
@@ -129,7 +107,7 @@ class WSService {
     }
   }
 
-   _scheduleReconnect() {
+  _scheduleReconnect() {
     if (this.reconnecting) return;
     this.reconnecting = true;
     setTimeout(() => {
@@ -138,9 +116,8 @@ class WSService {
     }, this.backoffMs);
   }
 
-   startHeartbeat() {
+  startHeartbeat() {
     this.stopHeartbeat();
-    // send a lightweight ping frame (server ignores unknown types harmlessly)
     this.pingTimer = window.setInterval(() => {
       if (this.socket?.readyState === WebSocket.OPEN) {
         try {
@@ -150,7 +127,7 @@ class WSService {
     }, this.pingEveryMs) as unknown as number;
   }
 
-   stopHeartbeat() {
+  stopHeartbeat() {
     if (this.pingTimer) {
       clearInterval(this.pingTimer);
       this.pingTimer = null;
