@@ -41,18 +41,18 @@ This project is a web-based parking reservation system built with React and Vite
 4. **Open the app in your browser**
    - Visit [http://localhost:5173](http://localhost:5173)
 
+
 5. **You can use any of these login data to login**
    - Visit [http://localhost:5173/login](http://localhost:5173/login)
 
-```json
-// login as admin
-   Username: superadmin
-   Password: superpass
+- Login as admin
+   -  Username: `superadmin`
+   -  Password: `superpass`
 
-// login as user
-   Username: `emp1`
-   Password: `pass1`
-```
+- Login as user
+   -  Username: `emp1`
+   -  Password: `pass1`
+
 
 ##  Project Structure
 
@@ -73,7 +73,8 @@ This project is a web-based parking reservation system built with React and Vite
 
 ## Project screens
 
-!Login Page
+### Login Page
+![Login Page](/src/assets/screens/login.png)
 ### Gates Page
 ![Gates Page](/src/assets/screens/gates.png)
 ### Zone Status
@@ -84,6 +85,8 @@ This project is a web-based parking reservation system built with React and Vite
 ![Ticket form](/src/assets/screens/ticket%20form.png)
 ### Subscribers
 ![Subscribers](/src/assets/screens/subscription.png)
+### Checkout
+![Checkout](/src/assets/screens/checkout.png)
 ### Admin Dashboard
 ![Admin / Control panel](/src/assets/screens/control%20panel.png)
 ### Employee Dashboard
