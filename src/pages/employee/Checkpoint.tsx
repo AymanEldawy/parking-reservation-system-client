@@ -1,11 +1,12 @@
 import CheckoutConfirm from '@/components/CheckoutConfirm';
 import CheckoutPanel from '@/components/CheckoutPanel';
 import TicketForm from '@/components/TicketForm'
-import type { TicketType } from '@/types/ticket.type';
+import { withUserGuard } from '@/HOC/withUserGuard';
+import type { CheckoutResponseType } from '@/types/ticket.type';
 import { useState } from 'react'
 
-const Checkpoint = () => {
-  const [ticket, setTicket] = useState<TicketType | undefined>();
+const Checkpoint = withUserGuard(() => {
+  const [ticket, setTicket] = useState<CheckoutResponseType | undefined>();
   const [tab, setTab] = useState<'ticket-form' | 'checkout' | 'confirm'>('ticket-form');
 
   return (
@@ -21,6 +22,6 @@ const Checkpoint = () => {
       ) : null}
     </section>
   )
-}
+})
 
 export default Checkpoint
