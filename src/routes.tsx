@@ -1,20 +1,21 @@
 import AdminLayout from "@/components/layout/AdminLayout";
-import EmployeeLayout from "@/components/layout/EmployeeLayout";
+import Layout from "@/components/layout/Layout";
 import type { RouteObject } from "react-router-dom";
 import Login from "@/pages/Login";
 import ControlPanel from "@/pages/admin/ControlPanel";
-import Subscriptions from "@/pages/admin/Subscriptions";
 import ParkingStateReport from "@/pages/admin/ParkingStateReport";
 import Gates from "@/pages/employee/Gates";
 import Checkpoint from "@/pages/employee/Checkpoint";
 import Zones from "@/pages/employee/Zones";
+import Employee from "./pages/admin/Employee";
+import NotFound from "./pages/NotFound";
 
 const routes: RouteObject[] = [
   {
     path: "/admin",
     children: [
       { index: true, element: <ControlPanel /> },
-      { path: "subscriptions", element: <Subscriptions /> },
+      { path: "employees", element: <Employee /> },
       { path: "parking-state-report", element: <ParkingStateReport /> },
     ],
     element: <AdminLayout />,
@@ -36,15 +37,13 @@ const routes: RouteObject[] = [
         element: <Checkpoint />,
       }
     ],
-    element: <EmployeeLayout />,
+    element: <Layout />,
   },
+  { path: '/login', element: <Login /> },
   {
-    path: "/",
-    children: [
-      { path: '/login', element: <Login /> },
-    ],
-    // element: <EmployeeLayout />,
-  },
+    path: "*",
+    element: <NotFound />
+  }
 ];
 
 
