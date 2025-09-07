@@ -23,9 +23,6 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     ...options,
     headers: getAuthHeaders(),
   });
-  // if (!response.ok) {
-  //   throw new Error(`HTTP error! status: ${response.status}`);
-  // }
   return response.json();
 };
 
