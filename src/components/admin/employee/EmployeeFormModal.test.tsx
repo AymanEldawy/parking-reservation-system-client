@@ -1,9 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import EmployeeFilters from './EmployeeFilters';
 import { describe, it, beforeEach, expect } from 'vitest';
 import { vi } from 'vitest';
 import EmployeeFormModal from './EmployeeFormModal';
-import { toast } from 'react-toastify';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -12,8 +10,8 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('Testing EmployeeFilters component', () => {
-  let setSelectedUser = vi.fn();
-  let setOpen = vi.fn();
+  const setSelectedUser = vi.fn();
+  const setOpen = vi.fn();
 
   beforeEach(() => {
     setSelectedUser.mockClear();
