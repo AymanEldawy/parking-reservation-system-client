@@ -43,4 +43,8 @@ export type CheckoutResponseType = TicketType & {
   breakdown: TicketBreakdownSegmentType[];
   zoneState: ZoneStateType;
   amount: number;
+  ticketId: string;
+  checkinAt: string;
+  checkoutAt: string | null;
 };
+

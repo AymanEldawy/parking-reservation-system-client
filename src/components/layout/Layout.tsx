@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import Menu from './Menu';
-import { withUserGuard } from '@/HOC/withUserGuard';
 
-const EmployeeLayout = withUserGuard(() => {
+const Layout = () => {
   return (
     <>
       <Menu />
       <Outlet />
     </>
   )
-})
+}
 
-export default EmployeeLayout
+export default Layout

@@ -15,49 +15,57 @@ import { Link } from "react-router-dom";
 type TicketModalProps = {
   ticketDetails: CheckinResponseType;
   onClose: () => void;
-  showCheckpointLink?: boolean;
 }
 
-const TicketModal = ({ ticketDetails, onClose, showCheckpointLink }: TicketModalProps) => {
+const TicketModal = ({ ticketDetails, onClose }: TicketModalProps) => {
   console.log(ticketDetails, 'ticketDetails');
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px] bg-white">
         <DialogHeader>
-          <DialogTitle>Successfully Check in <span className="text-[var(--primary-color)] font-bold">({ticketDetails.zoneState.name})</span></DialogTitle>
+          <DialogTitle>
+            <h2 className="text-green-600 text-lg font-semibold flex items-center gap-2 mb-4">
+              <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" />
+              </svg>
+              Successfully Checked In ({ticketDetails.zoneState.name})
+            </h2>
+          </DialogTitle>
           <DialogDescription>
-            <div className="mt-4 mb-2 grid grid-cols-2 gap-2 mb-2">
-              <p className="text-[var(--text-secondary)]">
-                Ticket ID: <span className="font-semibold text-[var(--text-primary)]">{ticketDetails.ticket.id}</span>
-              </p>
-              <p className="text-[var(--text-secondary)]">
-                Type: <span className="font-semibold text-[var(--text-primary)]">{ticketDetails.ticket.type}</span>
-              </p>
-              <p className="text-[var(--text-secondary)]">
-                Gate: <span className="font-semibold text-[var(--text-primary)]">{ticketDetails.ticket.gateId}</span>
-              </p>
-              <p className="text-[var(--text-secondary)]">
-                zone: <span className="font-semibold text-[var(--text-primary)]">{ticketDetails.ticket.zoneId}</span>
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-[var(--text-secondary)]">
-                Check in At: <span className="font-semibold text-[var(--text-primary)]">{new Date(ticketDetails.ticket.checkinAt).toLocaleString()}</span>
-              </p>
-              <p className="text-[var(--text-secondary)]">
-                Total Slots: <span className="font-semibold text-[var(--text-primary)]">{ticketDetails.zoneState.totalSlots}</span>
-              </p>
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm">
+                <span className="font-medium text-gray-600">Ticket ID:</span>
+                <span className="text-gray-800">{ticketDetails.ticket.id}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="font-medium text-gray-600">Type:</span>
+                <span className="text-gray-800 capitalize">{ticketDetails.ticket.type}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="font-medium text-gray-600">Gate:</span>
+                <span className="text-gray-800">{ticketDetails.ticket.gateId}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="font-medium text-gray-600">Zone:</span>
+                <span className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full text-xs font-semibold">{ticketDetails.ticket.zoneId}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="font-medium text-gray-600">Check-in At:</span>
+                <span className="text-gray-800">{new Date(ticketDetails.ticket.checkinAt).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="font-medium text-gray-600">Total Slots:</span>
+                <span className="text-gray-800">{ticketDetails.zoneState.totalSlots}</span>
+              </div>
             </div>
           </DialogDescription>
         </DialogHeader>
-        {showCheckpointLink ? (
-          <DialogFooter>
-            <Link to="/checkpoint" className="bg-[var(--primary-color)] hover:text-white  !text-white rounded-md px-4 py-2 ">
-              Go to checkpoint
-            </Link>
-          </DialogFooter>
-        ) : null}
+        <DialogFooter>
+          <Link to={`/checkpoint?ticketId=${ticketDetails.ticket.id}`}className="w-full text-center bg-[var(--primary-color)] hover:text-white  !text-white rounded-md px-4 py-2 ">
+            Go to checkpoint
+          </Link>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

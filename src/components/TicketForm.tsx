@@ -2,18 +2,25 @@ import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
 import { TicketService } from '@/services/api'
 import { toast } from 'react-toastify'
-import type { TicketType } from '@/types/ticket.type'
+import type { CheckoutResponseType } from '@/types/ticket.type'
+import { useSearchParams } from 'react-router-dom'
 
 type TicketFormProps = {
-  setTicket: (ticket: TicketType) => void;
+  setTicket: (ticket: CheckoutResponseType) => void;
   setTab: (tab: 'ticket-form' | 'checkout' | 'confirm') => void;
 }
 
 const TicketForm = ({ setTicket, setTab }: TicketFormProps) => {
-  const { watch, register, handleSubmit } = useForm<{ ticketId: string }>()
+  const [searchParams] = useSearchParams();
+  const ticketId = searchParams.get('ticketId') || '';
+  const { watch, register, handleSubmit } = useForm<{ ticketId: string }>({
+    defaultValues: {
+      ticketId
+    }
+  })
 
   const onSubmit = async (values: { ticketId: string }) => {
-    const data = await TicketService.getById(values.ticketId);
+    const data = await TicketService.checkout({ ticketId: values.ticketId });    
     if (data.status === 'error') {
       toast.error(data.message);
       return;

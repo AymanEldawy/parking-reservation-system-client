@@ -1,4 +1,7 @@
 import ErrorMessage from "@/components/shared/ErrorMessage";
+
+import { useAuthStore } from "@/store/authStore";
+import type { UserLoginType } from "@/types/user.type";
 import { useUserStore } from "@/store/userStore";
 import type { UserLoginType, UserType } from "@/types/user.type";
 import { useEffect } from "react";
@@ -15,28 +18,16 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm<UserLoginType>({
     defaultValues: {
-      // username: "emp1",
-      // password: "pass1"
-      username: "superadmin",
-      password: "superpass"
+      // username: "superadmin",
+      // password: "superpass"
+      username: "emp1",
+      password: "pass1"
     }
   });
+  const navigate = useNavigate()
+  const { user, token, login } = useAuthStore();
+  if(user && token) navigate('/') 
 
-  useEffect(() => {
-    if (user) {
-      navigate('/')
-    }
-  }, [user, navigate]);
-
-
-  // const onSubmit = async (data: UserLoginType) => {
-  //   const response = await login<{ user: UserType, token: string } | { message: string; status: 'error' }>(data);
-  //   if ('status' in response && response.status === 'error') {
-  //     toast.error(response.message);
-  //   } else {
-  //     navigate('/');
-  //   }
-  // };
   const onSubmit = async (values: UserLoginType) => {
     const data = await login(values);
     if (data && data.status === 'error') {

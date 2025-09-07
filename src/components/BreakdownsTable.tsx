@@ -29,7 +29,7 @@ const BreakdownsTable = ({ breakdown }: { breakdown: TicketBreakdownSegmentType[
             <TableCell className="whitespace-nowrap px-3 py-4 text-gray-800">{row.hours.toFixed(2)}</TableCell>
             <TableCell className="whitespace-nowrap px-3 py-4 text-gray-800">{row.rateMode}</TableCell>
             <TableCell className="whitespace-nowrap px-3 py-4 text-gray-800">{row.rate}</TableCell>
-            <TableCell className="whitespace-nowrap px-3 py-4 text-gray-800">{row.amount}</TableCell>
+            <TableCell className="whitespace-nowrap px-3 py-4 text-gray-800">${row.amount}</TableCell>
           </TableRow>
         ))}
       </TableBody>

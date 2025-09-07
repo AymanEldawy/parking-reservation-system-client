@@ -1,79 +1,47 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { MasterService, TicketService } from '@/services/api';
-import QUERY_KEYS from '@/data/queryKays';
 import { ws } from '@/services/ws';
 import type { ZoneType } from '@/types/zone.type';
 import ZoneCard from '@/components/ZoneCard';
 import SubscribersTab from '@/components/SubscribersTab';
 import TicketModal from '@/components/TicketModal';
-import ErrorModal from '@/components/shared/ErrorModal';
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-toastify';
+import { useZoneStore } from '@/store/zoneStore';
+import { TicketService } from '@/services/api';
+import GateHeader from '@/components/GateHeader';
+import { useQuery } from '@tanstack/react-query';
 
 const Zones = () => {
   const gateId = useParams().id;
   const [selectedTab, setSelectedTab] = useState('visitors');
-  const [zones, setZones] = useState<ZoneType[]>([]);
   const [selectedZone, setSelectedZone] = useState<ZoneType>();
   const [ticketDetails, setTicketDetails] = useState();
-  const [error, setError] = useState<{ message: string } | null>(null);
-
+  const { updateZones, zones } = useZoneStore()
   const onCloseTicket = () => setTicketDetails(undefined);
-  const onCloseError = () => setTicketDetails(undefined);
-  const zonesRef = useRef<ZoneType[]>([])
-
-  const { isLoading } = useQuery({
-    queryKey: [QUERY_KEYS.ZONES, gateId],
-    queryFn: async () => {
-      const response = await MasterService.getZonesByGateId(gateId);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      setZones(data);
-      zonesRef.current = data;
-    },
-    refetchOnWindowFocus: false,
-  });
-
+  const [connected, setConnected] = useState(false)
 
   useEffect(() => {
     ws.connect();
-    
+
     const offOpen = ws.on("open", () => {
       console.log('open');
       ws._send({
         type: 'subscribe',
         payload: { gateId }
       });
+      setConnected(true)
     });
 
     const offZone = ws.on("zone-update", (payload: ZoneType) => {
-      const existing = zonesRef.current.find((zone) => zone.id === payload.id);
+      updateZones(payload)
+      console.log('called here', payload);
 
-      let updatedZones;
-      if (existing) {
-        updatedZones = zonesRef.current.map((zone) =>
-          zone.id === payload.id ? { ...zone, ...payload } : zone
-        );
-      } else {
-        updatedZones = [...zonesRef.current, payload];
-      }
-
-      zonesRef.current = updatedZones;
-      setZones(updatedZones);
     });
-
 
     const offClose = ws.on("close", () => {
       console.log('close');
+      setConnected(false)
     });
 
     // cleanup
@@ -98,7 +66,6 @@ const Zones = () => {
       toast.error(data.message);
     } else {
       setTicketDetails(data);
-      setSelectedTab('subscribers')
     }
   }
 
@@ -108,6 +75,7 @@ const Zones = () => {
         <TicketModal ticketDetails={ticketDetails} onClose={onCloseTicket} />
         : null}
       <main className='container'>
+        <GateHeader connected={connected} />
         <div className="flex items-center border-b pb-2 my-4">
           {['visitors', 'subscribers'].map((tab) => (
             <button
@@ -128,7 +96,7 @@ const Zones = () => {
 
                   <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
                     {zones.map((zone) => (
-                      <ZoneCard key={zone.id} zone={zone} gateId={gateId} selectedZone={selectedZone} setSelectedZone={setSelectedZone} checkIn={checkIn} />
+                      <ZoneCard key={zone.id} zone={zone} gateId={gateId} selectedZone={selectedZone} setSelectedZone={setSelectedZone} />
                     ))}
                   </div>
                   <Button onClick={checkIn} disabled={!selectedZone} className='mt-4 btn !text-lg btn-primary'>Go to check in</Button>
@@ -137,7 +105,7 @@ const Zones = () => {
             </>
           )}
           {selectedTab === "subscribers" && (
-            <SubscribersTab gateId={gateId} zoneId={selectedZone?.id} />
+            <SubscribersTab gateId={gateId} zones={zones} />
           )}
         </div>
       </main>

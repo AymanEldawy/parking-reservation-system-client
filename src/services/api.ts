@@ -6,9 +6,14 @@ const defaultHeaders = {
 
 const getAuthHeaders = () => {
   const user = localStorage.getItem("PARKING_USER_KEY");
+  console.log(user, "user");
+
   if (user) {
-    const token = JSON.parse(user).token;
-    return { ...defaultHeaders, Authorization: `Bearer ${token}` };
+    const userStorage = JSON.parse(user);
+    return {
+      ...defaultHeaders,
+      Authorization: `Bearer ${userStorage?.state?.token}`,
+    };
   }
   return defaultHeaders;
 };
@@ -39,10 +44,16 @@ export const MasterService = {
     apiFetch("/master/gates", {
       method: "GET",
     }),
+
   getZonesByGateId: (gateId?: string) =>
     apiFetch(`/master/zones${gateId ? `?gateId=${gateId}` : ""}`, {
       method: "GET",
     }),
+  getZones: () =>
+    apiFetch("/master/zones", {
+      method: "GET",
+    }),
+
   getCategories: () =>
     apiFetch("/master/categories", {
       method: "GET",
@@ -108,6 +119,11 @@ export const AdminService = {
       body: JSON.stringify({ open }),
     }),
 
+  getZones: () =>
+    apiFetch("/admin/zones", {
+      method: "GET",
+    }),
+
   createRushHours: (data: { weekDay: number; from: string; to: string }) =>
     apiFetch("/admin/rush-hours", {
       method: "POST",
@@ -123,5 +139,30 @@ export const AdminService = {
   getSubscriptions: () =>
     apiFetch("/admin/subscriptions", {
       method: "GET",
+    }),
+
+  getEmployees: () =>
+    apiFetch("/admin/users", {
+      method: "GET",
+    }),
+
+  createEmployee: (data: {
+    username: string;
+    password: string;
+    role: string;
+  }) =>
+    apiFetch("/admin/users", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateCategoryRate: (
+    categoryId: string,
+    rateNormal: number,
+    rateSpecial: number
+  ) =>
+    apiFetch(`/admin/categories/${categoryId}`, {
+      method: "PUT",
+      body: JSON.stringify({ rateNormal, rateSpecial }),
     }),
 };

@@ -1,202 +1,20 @@
-import type { CheckoutResponseType, TicketType } from '@/types/ticket.type'
+import type { CheckoutResponseType } from '@/types/ticket.type'
 import BreakdownsTable from './BreakdownsTable'
 import TicketInfo from './TicketInfo'
 import { Button } from './ui/button'
 import { SubscriptionService, TicketService } from '@/services/api'
 import { toast } from 'react-toastify'
 import QUERY_KEYS from '@/data/queryKays'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import SubscriptionInfo from './SubscriptionInfo'
+import { useQuery } from '@tanstack/react-query'
 import CarCard from './CarCard'
 import type { CarType } from '@/types/subscription.type'
 
-const CHECKOUT_DUMMY: CheckoutResponseType = {
-  "ticketId": "t_010",
-  "checkinAt": "2025-08-24T08:00:00Z",
-  "checkoutAt": "2025-09-06T02:35:19.962Z",
-  "durationHours": 306.5889,
-  "breakdown": [
-    {
-      "from": "2025-08-24T08:00:00.000Z",
-      "to": "2025-08-25T07:00:00.000Z",
-      "hours": 23,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 4140
-    },
-    {
-      "from": "2025-08-25T07:00:00.000Z",
-      "to": "2025-08-25T09:00:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-08-25T09:00:00.000Z",
-      "to": "2025-08-25T17:00:00.000Z",
-      "hours": 8,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 1440
-    },
-    {
-      "from": "2025-08-25T17:00:00.000Z",
-      "to": "2025-08-25T19:00:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-08-25T19:00:00.000Z",
-      "to": "2025-08-29T07:30:00.000Z",
-      "hours": 84.5,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 15210
-    },
-    {
-      "from": "2025-08-29T07:30:00.000Z",
-      "to": "2025-08-29T09:30:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-08-29T09:30:00.000Z",
-      "to": "2025-08-29T16:30:00.000Z",
-      "hours": 7,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 1260
-    },
-    {
-      "from": "2025-08-29T16:30:00.000Z",
-      "to": "2025-08-29T18:30:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-08-29T18:30:00.000Z",
-      "to": "2025-08-30T10:00:00.000Z",
-      "hours": 15.5,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 2790
-    },
-    {
-      "from": "2025-08-30T10:00:00.000Z",
-      "to": "2025-08-30T14:00:00.000Z",
-      "hours": 4,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 1200
-    },
-    {
-      "from": "2025-08-30T14:00:00.000Z",
-      "to": "2025-09-01T07:00:00.000Z",
-      "hours": 41,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 7380
-    },
-    {
-      "from": "2025-09-01T07:00:00.000Z",
-      "to": "2025-09-01T09:00:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-09-01T09:00:00.000Z",
-      "to": "2025-09-01T17:00:00.000Z",
-      "hours": 8,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 1440
-    },
-    {
-      "from": "2025-09-01T17:00:00.000Z",
-      "to": "2025-09-01T19:00:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-09-01T19:00:00.000Z",
-      "to": "2025-09-05T07:30:00.000Z",
-      "hours": 84.5,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 15210
-    },
-    {
-      "from": "2025-09-05T07:30:00.000Z",
-      "to": "2025-09-05T09:30:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-09-05T09:30:00.000Z",
-      "to": "2025-09-05T16:30:00.000Z",
-      "hours": 7,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 1260
-    },
-    {
-      "from": "2025-09-05T16:30:00.000Z",
-      "to": "2025-09-05T18:30:00.000Z",
-      "hours": 2,
-      "rateMode": "special",
-      "rate": 5,
-      "amount": 600
-    },
-    {
-      "from": "2025-09-05T18:30:00.000Z",
-      "to": "2025-09-06T02:35:19.962Z",
-      "hours": 8.0889,
-      "rateMode": "normal",
-      "rate": 3,
-      "amount": 1456
-    }
-  ],
-  "amount": 57586,
-  "zoneState": {
-    "id": "zone_c",
-    "name": "Zone C",
-    "categoryId": "cat_regular",
-    "gateIds": [
-      "gate_2"
-    ],
-    "totalSlots": 80,
-    "occupied": 39,
-    "free": 41,
-    "reserved": 1,
-    "availableForVisitors": 40,
-    "availableForSubscribers": 41,
-    "rateNormal": 3,
-    "rateSpecial": 5,
-    "open": true
-  }
-}
-
-
 type CheckoutPanelProps = {
-  ticket: TicketType | undefined;
+  ticket: CheckoutResponseType | undefined;
   setTab: (tab: 'ticket-form' | 'checkout' | 'confirm') => void;
 }
 
 const CheckoutPanel = ({ ticket, setTab }: CheckoutPanelProps) => {
-
   const { data: subscription } = useQuery({
     queryKey: [QUERY_KEYS.CHECKOUT, ticket?.subscriptionId],
     queryFn: async () => {
@@ -209,24 +27,9 @@ const CheckoutPanel = ({ ticket, setTab }: CheckoutPanelProps) => {
     enabled: !!ticket?.subscriptionId,
   });
 
-  const { mutate: checkoutMutation, data: checkout, isPending } = useMutation({
-    mutationKey: ['checkout', ticket?.id],
-    mutationFn: async (payload: { ticketId: string; forceConvertToVisitor?: boolean }) => {
-      const response = await TicketService.checkout(payload);
-
-      if (response.status === 'error') {
-        toast.error(response.message);
-        throw new Error(response.message);
-      }
-
-      toast.success('تم تنفيذ Check-out بنجاح');
-      return response;
-    },
-  });
-
   const handleMismatch = async () => {
     if (!ticket) return;
-    const response = await TicketService.checkout({ ticketId: ticket.id, forceConvertToVisitor: true })
+    const response = await TicketService.checkout({ ticketId: ticket.ticketId, forceConvertToVisitor: true })
     if (response.status === 'error') {
       toast.error(response.message);
       return;
@@ -234,15 +37,17 @@ const CheckoutPanel = ({ ticket, setTab }: CheckoutPanelProps) => {
     setTab('confirm')
   }
 
-  const processToCheckout = () => checkoutMutation({ ticketId: ticket?.id as string})
-
   return (
     <div className='w-full'>
       <div className=' bg-white p-4 border border-gray-200 rounded-xl my-4'>
-        <h2 className='text-xl font-bold'>Ticket checkout</h2>
-        {ticket && (
-          <TicketInfo ticket={ticket} isAlreadyCheckout={checkout && checkout?.status === 'error'} />
-        )}
+        <h2 className='text-xl font-bold'>Ticket ({ticket?.ticketId}) checkout</h2>
+        <div className='flex flex-wrap items-center gap-4 mt-4 text-sm'>
+          <p className='flex gap-2'><span className="font-semibold whitespace-nowrap">Check in At: </span>{ticket?.checkinAt ? new Date(ticket.checkinAt).toLocaleString() : 'N/A'}</p>
+          <p className='flex gap-2'><span className="font-semibold whitespace-nowrap">Checkout At: </span>{ticket?.checkoutAt ? new Date(ticket.checkoutAt).toLocaleString() : 'N/A'}</p>
+          <Button onClick={handleMismatch} className="!p-0 ml-auto text-sm text-red-500 hover:text-[var(--primary-color)] underline transition-colors">
+            Mismatch? Convert to visitor parking.
+          </Button>
+        </div>
         {subscription && subscription.cars ? (
           <div className='mt-8'>
             <h2 className='text-xl font-bold mb-2'>Subscription Cars Details</h2>
@@ -251,40 +56,26 @@ const CheckoutPanel = ({ ticket, setTab }: CheckoutPanelProps) => {
             ))}
           </div>
         ) : null}
-        {/* {ticket && ticket.subscriptionId ? (
-        ) : null} */}
-        <div className="flex justify-between flex-wrap gap-2 items-center mt-8">
-          <Button onClick={handleMismatch} className="text-sm text-gray-500 hover:text-[var(--primary-color)] underline transition-colors">
-            Mismatch? Convert to visitor parking.
-          </Button>
-          <Button
-            className='btn btn-primary !text-base'
-            disabled={isPending}
-            onClick={processToCheckout}
 
-          >
-            Process Checkout
-          </Button>
-        </div>
       </div>
-      {checkout && checkout?.status !== 'error' ? (
+      {ticket ? (
         <div className=' bg-white p-4 border border-gray-200 rounded-xl my-4'>
           <h2 className='text-xl font-bold'>Breakdowns</h2>
-          <BreakdownsTable breakdown={checkout.breakdown} />
+          <BreakdownsTable breakdown={ticket.breakdown} />
           <div className="border-t border-gray-200 p-6">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <p className="text-gray-500">Total Duration</p>
-                <p className="font-medium text-gray-800">4 hours</p>
+                <p className="font-medium text-gray-800">{ticket.durationHours} hours</p>
               </div>
               <div className="flex justify-between text-lg">
                 <p className="font-semibold text-gray-900">Total Amount</p>
-                <p className="font-bold text-gray-900">$13.00</p>
+                <p className="font-bold text-gray-900">${ticket.amount}</p>
               </div>
             </div>
           </div>
         </div>
-      ): null}
+      ) : null}
     </div>
   )
 }
