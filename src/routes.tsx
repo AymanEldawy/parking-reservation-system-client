@@ -20,7 +20,6 @@ const routes: RouteObject[] = [
     ],
     element: <AdminLayout />,
   },
-
   {
     path: "/",
     children: [
