@@ -1,5 +1,5 @@
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
-import {DialogHeader } from '../ui/dialog';
+
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
 
 const ErrorModal = ({ title, description }: { title?: string, description?: string, onClose?: () => void }) => {
 
