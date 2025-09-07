@@ -5,7 +5,7 @@ import { vi } from 'vitest';
 
 describe('Testing EmployeeFilters component', () => {
   const defaultFilters = { search: '', role: '', status: '' };
-  let onFiltersChange = vi.fn();
+  const onFiltersChange = vi.fn();
 
   beforeEach(() => {
     onFiltersChange.mockClear();
