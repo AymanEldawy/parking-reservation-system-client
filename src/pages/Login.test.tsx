@@ -1,7 +1,7 @@
 
 import { expect, it, vi, describe } from 'vitest'
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import Login from "@/pages/Login";
+import Login from "./Login";
 import { toast } from "react-toastify";
 
 

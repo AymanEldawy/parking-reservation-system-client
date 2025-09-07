@@ -9,7 +9,7 @@ type RushWindowFormProps = {
   to: string;
 }
 const RushWindowForm = () => {
-  const { register, reset, handleSubmit } = useForm<RushWindowFormProps>();
+  const { register, reset, handleSubmit, formState: { isDirty } } = useForm<RushWindowFormProps>();
   const onSubmit = async (data: RushWindowFormProps) => {
     console.log(data, "data");
 
@@ -67,6 +67,7 @@ const RushWindowForm = () => {
           </div>
         </div>
         <Button
+          disabled={!isDirty }
           className='btn-blue !rounded-md !text-base'>
           Rush Hour
         </Button>

@@ -14,7 +14,7 @@ type CategoryRateFormProps = {
 }
 
 const CategoryRateForm = () => {
-  const { register, setValue, watch, handleSubmit } = useForm<CategoryRateFormProps>();
+  const { register, setValue, watch, handleSubmit, formState: { isDirty } } = useForm<CategoryRateFormProps>();
   const queryClient = useQueryClient();
 
   const { data: categories } = useQuery({
@@ -108,6 +108,7 @@ const CategoryRateForm = () => {
           />
         </div>
         <Button
+          disabled={!isDirty}
           className='btn-blue !rounded-md !text-base'>
           Update Rate
         </Button>

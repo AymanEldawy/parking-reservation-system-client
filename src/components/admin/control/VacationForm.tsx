@@ -9,7 +9,7 @@ type VacationFormProps = {
   to: string;
 }
 const VacationForm = () => {
-  const { register, reset, handleSubmit } = useForm<VacationFormProps>();
+  const { register, reset, handleSubmit, formState: { isDirty } } = useForm<VacationFormProps>();
 
   const onSubmit = async (data: VacationFormProps) => {
     console.log(data, "data");
@@ -65,6 +65,7 @@ const VacationForm = () => {
           </div>
         </div>
         <Button
+          disabled={!isDirty}
           className='btn-blue !rounded-md !text-base'>
           Add Holiday
         </Button>
