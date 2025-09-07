@@ -5,6 +5,8 @@ export const withUserGuard = (Component: React.FC) => {
   const Wrapper: React.FC = (props) => {
     const pathname = window.location.pathname;
     const { user, token } = useAuthStore();
+    console.log('called here');
+    
     if (user && user.role !== "employee") {
       return <Navigate to="/admin" replace />;
     }
