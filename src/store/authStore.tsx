@@ -1,9 +1,9 @@
 import { AuthService } from '@/services/api';
-import type { UserLoginType, UserStoreType } from '@/types/user.type';
+import type { UserLoginType, AuthStoreType } from '@/types/user.type';
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware';
 
-export const useUserStore = create<UserStoreType>()(
+export const useAuthStore = create<AuthStoreType>()(
   persist(
     (set) => ({
       user: null,
@@ -12,9 +12,9 @@ export const useUserStore = create<UserStoreType>()(
       error: null,
       login: async (user: UserLoginType) => {
         const data = await AuthService.login(user);
-        console.log(data, 'dasdasdas');
-
         if (data.status !== 'error')
+          console.log(data, 'data');
+          
           set({ user: data.user, token: data.token });
         return data
       },
@@ -23,8 +23,11 @@ export const useUserStore = create<UserStoreType>()(
       },
     }),
     {
-      name: 'PARKING_USER_KEY', // Key for localStorage
-      partialize: (state) => ({ user: state.user, token: state.token }), // Persist only user and token
+      name: 'PARKING_USER_KEY',
+      partialize(state) {
+        const { user, token } = state;
+        return { user, token };
+      }
     }
   )
 );
