@@ -1,4 +1,4 @@
-const HTTP_BASE = "http://localhost:3000/api/v1";
+const HTTP_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
 const defaultHeaders = {
   "Content-Type": "application/json",
