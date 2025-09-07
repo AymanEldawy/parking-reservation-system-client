@@ -1,8 +1,25 @@
-import React from 'react'
+import CheckoutConfirm from '@/components/CheckoutConfirm';
+import CheckoutPanel from '@/components/CheckoutPanel';
+import TicketForm from '@/components/TicketForm'
+import type { TicketType } from '@/types/ticket.type';
+import { useState } from 'react'
 
 const Checkpoint = () => {
+  const [ticket, setTicket] = useState<TicketType | undefined>();
+  const [tab, setTab] = useState<'ticket-form' | 'checkout' | 'confirm'>('ticket-form');
+
   return (
-    <div>Checkpoint</div>
+    <section className="container py-12 overflow-hidden">
+      {tab === 'ticket-form' ? (
+        <TicketForm setTicket={setTicket} setTab={setTab} />
+      ) : null}
+      {tab === 'checkout' ? (
+        <CheckoutPanel setTab={setTab} ticket={ticket}/>
+      ) : null}
+      {tab === 'confirm' ? (
+        <CheckoutConfirm />
+      ) : null}
+    </section>
   )
 }
 

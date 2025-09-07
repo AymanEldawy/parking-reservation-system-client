@@ -1,27 +1,34 @@
+import GateCard from "@/components/GateCard";
+import QUERY_KEYS from "@/data/queryKays";
+import { MasterService } from "@/services/api";
+import type { GateType } from "@/types/gate.type";
+import { useQuery } from "@tanstack/react-query"
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
 
 const Gates = () => {
+  const { isLoading, data: gates } = useQuery({
+    queryKey: [QUERY_KEYS.GATE],
+    queryFn: async () => {
+      const data = await MasterService.getGates();
+      return data;
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+
+
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
-      <Tabs defaultValue="account">
-        <TabsList>
-          <TabsTrigger value="visitors">Visitors</TabsTrigger>
-          <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
-        </TabsList>
-        <TabsContent value="visitors">
-          Visitors
-        </TabsContent>
-        <TabsContent value="subscribers">
-          Subscribers
-        </TabsContent>
-      </Tabs>
-    </div>
+    <main className="container mx-auto px-4 my-4">
+      <h1 className="md:text-3xl mb-4 font-bold">Gates</h1>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {
+          gates.map((gate: GateType) => (
+            <GateCard key={gate.id} gate={gate} />
+          ))
+        }
+      </div>
+    </main>
   )
 }
 

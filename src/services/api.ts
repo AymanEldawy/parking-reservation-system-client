@@ -1,71 +1,127 @@
-// services/api.ts
-import axios, { type AxiosInstance } from "axios";
 const HTTP_BASE = "http://localhost:3000/api/v1";
 
-const api: AxiosInstance = axios.create({
-  baseURL: HTTP_BASE,
-  headers: { "Content-Type": "application/json" },
-});
+const defaultHeaders = {
+  "Content-Type": "application/json",
+};
 
-// If you ever add HTTP auth, set your token in localStorage("authToken")
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("authToken");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+const getAuthHeaders = () => {
+  const user = localStorage.getItem("PARKING_USER_KEY");
+  if (user) {
+    const token = JSON.parse(user).token;
+    return { ...defaultHeaders, Authorization: `Bearer ${token}` };
+  }
+  return defaultHeaders;
+};
+
+const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
+  const response = await fetch(`${HTTP_BASE}${endpoint}`, {
+    ...options,
+    headers: getAuthHeaders(),
+  });
+  // if (!response.ok) {
+  //   throw new Error(`HTTP error! status: ${response.status}`);
+  // }
+  return response.json();
+};
 
 /* ---- Auth ---- */
 export const AuthService = {
   login: (data: { username: string; password: string }) =>
-    api.post("/auth/login", data),
+    apiFetch("/auth/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 };
 
 /* ---- Master ---- */
 export const MasterService = {
-  getGates: () => api.get("/master/gates"),
-  getZones: (gateId?: string) =>
-    api.get("/master/zones", { params: gateId ? { gateId } : {} }),
-  getCategories: () => api.get("/master/categories"),
+  getGates: () =>
+    apiFetch("/master/gates", {
+      method: "GET",
+    }),
+  getZonesByGateId: (gateId?: string) =>
+    apiFetch(`/master/zones${gateId ? `?gateId=${gateId}` : ""}`, {
+      method: "GET",
+    }),
+  getCategories: () =>
+    apiFetch("/master/categories", {
+      method: "GET",
+    }),
 };
 
 /* ---- Subscriptions ---- */
 export const SubscriptionService = {
-  getById: (id: string) => api.get(`/subscriptions/${id}`),
+  getById: (id: string) =>
+    apiFetch(`/subscriptions/${id}`, {
+      method: "GET",
+    }),
 };
 
 /* ---- Tickets ---- */
 export const TicketService = {
   checkin: (data: {
-    gateId: string;
-    zoneId: string;
+    gateId?: string;
+    zoneId?: string;
     type: "visitor" | "subscriber";
     subscriptionId?: string;
-  }) => api.post("/tickets/checkin", data),
+  }) =>
+    apiFetch("/tickets/checkin", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 
   checkout: (data: { ticketId: string; forceConvertToVisitor?: boolean }) =>
-    api.post("/tickets/checkout", data),
+    apiFetch("/tickets/checkout", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 
-  getById: (id: string) => api.get(`/tickets/${id}`),
+  getById: (id: string) =>
+    apiFetch(`/tickets/${id}`, {
+      method: "GET",
+    }),
 };
 
 /* ---- Admin ---- */
 export const AdminService = {
-  getParkingState: () => api.get("/admin/reports/parking-state"),
-  updateCategory: (id: string, body: Partial<{
-    rateNormal: number;
-    rateSpecial: number;
-    name: string;
-    description: string;
-  }>) => api.put(`/admin/categories/${id}`, body),
+  getParkingState: () =>
+    apiFetch("/admin/reports/parking-state", {
+      method: "GET",
+    }),
+  updateCategory: (
+    id: string,
+    body: Partial<{
+      rateNormal: number;
+      rateSpecial: number;
+      name: string;
+      description: string;
+    }>
+  ) =>
+    apiFetch(`/admin/categories/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    }),
 
   setZoneOpen: (id: string, open: boolean) =>
-    api.put(`/admin/zones/${id}/open`, { open }),
+    apiFetch(`/admin/zones/${id}/open`, {
+      method: "PUT",
+      body: JSON.stringify({ open }),
+    }),
 
   createRushHours: (data: { weekDay: number; from: string; to: string }) =>
-    api.post("/admin/rush-hours", data),
+    apiFetch("/admin/rush-hours", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 
   createVacation: (data: { name: string; from: string; to: string }) =>
-    api.post("/admin/vacations", data),
+    apiFetch("/admin/vacations", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 
-  getSubscriptions: () => api.get("/admin/subscriptions"),
+  getSubscriptions: () =>
+    apiFetch("/admin/subscriptions", {
+      method: "GET",
+    }),
 };
