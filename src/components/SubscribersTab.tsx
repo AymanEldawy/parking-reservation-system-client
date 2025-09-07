@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import TicketModal from './TicketModal';
 import SubscriptionInfo from './SubscriptionInfo';
+import type { ZoneType } from '@/types/zone.type';
 
-const SubscribersTab = ({ gateId, zoneId }: { gateId: string | undefined, zoneId: string | undefined }) => {
+const SubscribersTab = ({ gateId, zones }: { gateId: string | undefined, zones: ZoneType[] }) => {
   const {
     handleSubmit,
     register,
@@ -15,7 +16,6 @@ const SubscribersTab = ({ gateId, zoneId }: { gateId: string | undefined, zoneId
   } = useForm<SubscriptionFormType>({});
   const [subscription, setSubscription] = useState<SubscriptionType>();
   const [ticketDetails, setTicketDetails] = useState();
-
   const onCloseTicket = () => setTicketDetails(undefined);
 
   const onSubmit = async ({ subscriptionId }: SubscriptionFormType) => {
@@ -24,17 +24,28 @@ const SubscribersTab = ({ gateId, zoneId }: { gateId: string | undefined, zoneId
       toast.error(data.message);
       return;
     }
-    if (data.active) {
-      const response = await TicketService.checkin({
-        type: "subscriber", subscriptionId, gateId, zoneId,
-      })
-      if (response.status === 'error') {
-        toast.error(response.message);
-        return;
-      }
-      setTicketDetails(response);
-    }
     setSubscription(data)
+
+    if (!data.active) {
+      toast.error('Subscription is not active');
+      return
+    }
+
+    const selectedZone = zones.find((zone) => zone.categoryId === data.category);
+
+    if (!selectedZone) {
+      toast.error('category is not allow selection for these zones');
+      return
+    }
+
+    const response = await TicketService.checkin({
+      type: "subscriber", subscriptionId, gateId, zoneId: selectedZone.id,
+    })
+    if (response.status === 'error') {
+      toast.error(response.message);
+      return;
+    }
+    setTicketDetails(response);
   }
 
   return (
@@ -66,10 +77,6 @@ const SubscribersTab = ({ gateId, zoneId }: { gateId: string | undefined, zoneId
             </button>
           </form>
         </div>
-        {subscription ? (
-          <SubscriptionInfo subscription={subscription} />
-        ) : null}
-
       </div>
     </>
   )
