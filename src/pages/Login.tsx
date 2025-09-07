@@ -1,11 +1,17 @@
 import ErrorMessage from "@/components/shared/ErrorMessage";
+
 import { useAuthStore } from "@/store/authStore";
 import type { UserLoginType } from "@/types/user.type";
+import { useUserStore } from "@/store/userStore";
+import type { UserLoginType, UserType } from "@/types/user.type";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Login = () => {
+  const { login, user } = useUserStore();
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
@@ -22,12 +28,16 @@ const Login = () => {
   const { user, token, login } = useAuthStore();
   if(user && token) navigate('/') 
 
-  const onSubmit = async (data: UserLoginType) => {
-    const response = await login(data)
-    if (response.status === 'error') {
-      toast.error(response.message)
+  const onSubmit = async (values: UserLoginType) => {
+    const data = await login(values);
+    if (data && data.status === 'error') {
+      toast.error(data.message);
+      return;
+    } else {
+      navigate('/');
     }
-  }
+  };
+
 
   return (
     <main className="flex flex-1 items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
