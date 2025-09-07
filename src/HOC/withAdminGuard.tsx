@@ -1,9 +1,11 @@
-import { useUserStore } from "@/store/userStore";
+import { useAuthStore } from "@/store/authStore";
 import { Navigate } from "react-router-dom";
 
 const withAdminGuard = (Component: React.FC) => {
   const Wrapper: React.FC = (props) => {
-    const { user, token } = useUserStore();
+    const { user, token } = useAuthStore();
+    console.log(user, 'user', token, 'token');
+    
     const pathname = window.location.pathname;
 
     // Logged in but not admin → redirect to user home
