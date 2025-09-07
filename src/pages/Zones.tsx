@@ -88,7 +88,7 @@ const Zones = () => {
           ))}
         </div>
 
-        <div className="mt-4">
+        <div className="pt-4 pb-8">
           {selectedTab === "visitors" && (
             <>
               {zones?.length > 0 ? (

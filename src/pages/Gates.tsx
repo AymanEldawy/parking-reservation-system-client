@@ -1,4 +1,6 @@
 import GateCard from "@/components/GateCard";
+import GateCardSkeleton from "@/components/GateCardSkeleton";
+import ErrorMessage from "@/components/shared/ErrorMessage";
 import QUERY_KEYS from "@/data/queryKays";
 import { MasterService } from "@/services/api";
 import type { GateType } from "@/types/gate.type";
@@ -15,17 +17,25 @@ const Gates = () => {
     refetchOnWindowFocus: false,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-
-
   return (
     <main className="container mx-auto px-4 my-4">
       <h1 className="md:text-3xl mb-4 font-bold">Gates</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {
-          gates.map((gate: GateType) => (
-            <GateCard key={gate.id} gate={gate} />
-          ))
+        {isLoading ? (
+          <>
+            <GateCardSkeleton />
+            <GateCardSkeleton />
+            <GateCardSkeleton />
+            <GateCardSkeleton />
+          </>
+        ) :
+          <>
+            {gates.length ? gates.map((gate: GateType) => (
+              <GateCard key={gate.id} gate={gate} />
+            )) :
+              <p className="bg-red-50 text-red-500 font-medium text-center col-span-full p-4">There is no gates</p>
+            }
+          </>
         }
       </div>
     </main>
