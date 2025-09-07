@@ -1,7 +1,8 @@
 import ErrorMessage from "@/components/shared/ErrorMessage";
-import { useUserStore } from "@/store/userStore";
+import { useAuthStore } from "@/store/authStore";
 import type { UserLoginType } from "@/types/user.type";
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -11,16 +12,20 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm<UserLoginType>({
     defaultValues: {
-      username: "superadmin",
-      password: "superpass"
+      // username: "superadmin",
+      // password: "superpass"
+      username: "emp1",
+      password: "pass1"
     }
   });
-  const login = useUserStore((state) => state.login);
+  const navigate = useNavigate()
+  const { user, token, login } = useAuthStore();
+  if(user && token) navigate('/') 
 
   const onSubmit = async (data: UserLoginType) => {
     const response = await login(data)
-    if (response.data.status === 'error') {
-      toast.error(response.data.message)
+    if (response.status === 'error') {
+      toast.error(response.message)
     }
   }
 
