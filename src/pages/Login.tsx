@@ -1,6 +1,7 @@
 import ErrorMessage from "@/components/shared/ErrorMessage";
 import { useAuthStore } from "@/store/authStore";
 import type { UserLoginType } from "@/types/user.type";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -15,14 +16,18 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm<UserLoginType>({
     defaultValues: {
-      // username: "superadmin",
-      // password: "superpass"
-      username: "emp1",
-      password: "pass1"
+      username: "superadmin",
+      password: "superpass"
+      // username: "emp1",
+      // password: "pass1"
     }
   });
 
-  if (user && token) navigate('/')
+  useEffect(() => {
+    if (user && token) {
+      navigate('/');
+    }
+  }, [user, token, navigate]);
 
   const onSubmit = async (values: UserLoginType) => {
     const data = await login(values);
