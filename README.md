@@ -53,6 +53,11 @@ This project is a web-based parking reservation system built with React and Vite
    -  Username: `emp1`
    -  Password: `pass1`
 
+## Usage
+- For production build, use:
+  ```bash
+  npm run build
+  ```
 
 ##  Project Structure
 
@@ -66,10 +71,7 @@ This project is a web-based parking reservation system built with React and Vite
 ## Notes
 
 - Make sure your backend API and WebSocket server are running and accessible.
-- For production build, use:
-  ```bash
-  npm run build
-  ```
+- You can clone the backend repository from https://github.com/WeLink-Cargo/parking-reservations-system-task
 
 ## Project screens
 
@@ -87,11 +89,11 @@ This project is a web-based parking reservation system built with React and Vite
 ![Subscribers](/src/assets/screens/subscription.png)
 ### Checkout
 ![Checkout](/src/assets/screens/checkout.png)
-### Admin Dashboard
+### Admin / Control panel
 ![Admin / Control panel](/src/assets/screens/control%20panel.png)
-### Employee Dashboard
+### Admin / Employees
 ![Admin / Employee](/src/assets/screens/users.png)
-### Logs Dashboard
+### Admin / Logs 
 ![Admin / Logs ](/src/assets/screens/logs.png)
-### Parking state
+### Admin / Parking state
 ![Admin / Parking state](/src/assets/screens/parking%20state.png)
