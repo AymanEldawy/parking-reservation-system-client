@@ -112,7 +112,7 @@ button:focus-visible {
 }
 
 .btn-primary {
-  @apply bg-[var(--primary-color)] text-white;
+  @apply bg-[var(--primary-color)] text-white border-transparent;
 }
 
 button.btn-primary:hover {
@@ -124,7 +124,7 @@ button.btn-primary:hover {
 }
 
 button.btn-blue:hover {
-  @apply bg-blue-800 text-white;
+  @apply bg-blue-800 text-white border-transparent;
 }
 
 .btn-red {
@@ -132,7 +132,7 @@ button.btn-blue:hover {
 }
 
 button.btn-red:hover {
-  @apply bg-red-800 text-white;
+  @apply bg-red-800 text-white border-transparent;
 }
 
 .btn-green {
@@ -140,7 +140,7 @@ button.btn-red:hover {
 }
 
 button.btn-green:hover {
-  @apply bg-green-800 text-white;
+  @apply bg-green-800 text-white border-transparent;
 }
 
 .btn-yellow {
@@ -148,7 +148,7 @@ button.btn-green:hover {
 }
 
 button.btn-yellow:hover {
-  @apply bg-yellow-800 text-white;
+  @apply bg-yellow-800 text-white border-transparent;
 }
 
 .btn-purple {
@@ -156,5 +156,41 @@ button.btn-yellow:hover {
 }
 
 button.btn-purple:hover {
-  @apply bg-purple-800 text-white;
+  @apply bg-purple-800 text-white border-transparent;
+}
+
+@media print {
+  @page {
+    margin: 0;
+    position: relative; 
+    size: auto;
+  }
+  body, html {
+    background: white;
+    height: auto;
+    min-height: unset;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .printable-content,
+  .printable-content * {
+    visibility: visible;
+  }
+  .printable-content {
+    position: absolute;
+    top: 220px;
+    width: 100%;
+    border: none !important;
+    box-shadow: none !important;
+    scale: 1.5;
+  }
+  .printable-content h2 {
+    color: black;
+    text-align: center;
+    font-size: 1.3rem;
+  }
+  .no-print, .printable-content a, .printable-content button {
+    display: none !important;
+  }
 }

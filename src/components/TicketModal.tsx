@@ -9,7 +9,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import type { CheckinResponseType } from "@/types/ticket.type";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
 
 
 type TicketModalProps = {
@@ -19,16 +21,16 @@ type TicketModalProps = {
 
 const TicketModal = ({ ticketDetails, onClose }: TicketModalProps) => {
   console.log(ticketDetails, 'ticketDetails');
+const contentRef = useRef<HTMLDivElement>(null);
+const reactToPrintFn = useReactToPrint({ contentRef, pageStyle: 'printable-content' });
+
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-white">
+      <DialogContent className="sm:max-w-[425px] bg-white printable-content" ref={contentRef}>
         <DialogHeader>
           <DialogTitle>
             <h2 className="text-green-600 text-lg font-semibold flex items-center gap-2 mb-4">
-              <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" />
-              </svg>
               Successfully Checked In ({ticketDetails.zoneState.name})
             </h2>
           </DialogTitle>
@@ -61,10 +63,11 @@ const TicketModal = ({ ticketDetails, onClose }: TicketModalProps) => {
             </div>
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Link to={`/checkpoint?ticketId=${ticketDetails.ticket.id}`}className="w-full text-center bg-[var(--primary-color)] hover:text-white  !text-white rounded-md px-4 py-2 ">
+        <DialogFooter className="no-print">
+          <Link to={`/checkpoint?ticketId=${ticketDetails.ticket.id}`} className="w-full text-center bg-[var(--primary-color)] hover:text-white  !text-white rounded-md px-4 py-2 ">
             Go to checkpoint
           </Link>
+          <Button onClick={reactToPrintFn} className="!rounded-md btn-blue !text-base" variant="outline">Print</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
