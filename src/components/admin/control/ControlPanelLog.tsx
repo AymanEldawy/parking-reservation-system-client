@@ -1,7 +1,7 @@
 import { ws } from '@/services/ws';
 import type { AdminLogType } from '@/types/user.type';
 import { getLogColor } from '@/utils/functions';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 const ControlPanelLog = () => {
   const [logs, setLogs] = useState<AdminLogType[]>([
@@ -21,7 +21,6 @@ const ControlPanelLog = () => {
   useEffect(() => {
     ws.connect();
     const offOpen = ws.on("open", () => {
-      console.log('open control');
       ws._send({
         type: 'subscribe',
         payload: { gateId: 'gate_1' }
@@ -29,11 +28,10 @@ const ControlPanelLog = () => {
     });
 
     const offClose = ws.on("close", () => {
-      console.log('close control');
+      setLogs([]);
     });
 
     const offControl = ws.on("admin-update", (payload) => {
-      console.log('admin-update control', payload);
       setLogs((prev) => [...(prev ?? []), payload] as AdminLogType[]);
     });
 

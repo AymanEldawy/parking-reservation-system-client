@@ -34,7 +34,6 @@ const ZoneForm = () => {
     const subscription = watch((value, { name }) => {
       if (name === "zoneId") {
         const zone = zones.find((zone: ZoneType) => zone.id === watch('zoneId'));
-        console.log(zone, 'zone');
         if (zone) {
           setValue('isOpen', zone.open);
         }
@@ -44,21 +43,18 @@ const ZoneForm = () => {
 
   }, [watch, zones]);
 
-  console.log(zones, 'zones');
-
   const onSubmit = async (data: ZoneFormProps) => {
     if (!data.zoneId) {
       toast.error('Please select a zone.');
       return;
     }
 
-    console.log(data, 'data');
-
     const response = await AdminService.setZoneOpen(data.zoneId, data.isOpen);
     if (response.status === 'error') {
       toast.error(response.message);
       return;
     }
+    
     queryClient.setQueryData([QUERY_KEYS.ZONES], (oldData: ZoneType[]) => {
       if (!oldData) return [response];
       const index = oldData.findIndex((zone: ZoneType) => zone.id === data.zoneId);

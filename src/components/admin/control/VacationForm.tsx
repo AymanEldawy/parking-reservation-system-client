@@ -12,8 +12,6 @@ const VacationForm = () => {
   const { register, reset, handleSubmit, formState: { isDirty } } = useForm<VacationFormProps>();
 
   const onSubmit = async (data: VacationFormProps) => {
-    console.log(data, "data");
-
     if (!data.name || !data.from || !data.to) {
       toast.error("Please fill all the fields");
       return;
@@ -24,12 +22,8 @@ const VacationForm = () => {
       return;
     }
     toast.success("Vacation created successfully");
-    console.log(data);
     reset();
-
   }
-
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 ">

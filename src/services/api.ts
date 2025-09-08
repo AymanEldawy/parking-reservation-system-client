@@ -6,7 +6,6 @@ const defaultHeaders = {
 
 const getAuthHeaders = () => {
   const user = localStorage.getItem("PARKING_USER_KEY");
-  console.log(user, "user");
 
   if (user) {
     const userStorage = JSON.parse(user);

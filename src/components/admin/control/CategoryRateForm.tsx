@@ -33,9 +33,7 @@ const CategoryRateForm = () => {
     const subscription = watch((value, { name }) => {
       if (name === "categoryId") {
         const category = categories.find((category: CategoryType) => category.id === watch('categoryId'));
-        console.log(category, 'category');
         if (category) {
-
           setValue('rateNormal', category.rateNormal);
           setValue('rateSpecial', category.rateSpecial);
         }
