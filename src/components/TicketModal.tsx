@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -20,14 +19,12 @@ type TicketModalProps = {
 }
 
 const TicketModal = ({ ticketDetails, onClose }: TicketModalProps) => {
-  console.log(ticketDetails, 'ticketDetails');
-const contentRef = useRef<HTMLDivElement>(null);
-const reactToPrintFn = useReactToPrint({ contentRef, pageStyle: 'printable-content' });
-
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({ contentRef, pageStyle: 'printable-content' });
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-white printable-content" ref={contentRef}>
+      <DialogContent className="sm:max-w-[425px] bg-white printable-content modal-content-container" ref={contentRef}>
         <DialogHeader>
           <DialogTitle>
             <h2 className="text-green-600 text-lg font-semibold flex items-center gap-2 mb-4">

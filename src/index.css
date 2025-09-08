@@ -47,12 +47,12 @@ a:hover {
 }
 
 .menu a {
-  @apply text-gray-500 font-medium px-2 border-b-2 pb-2 border-transparent
+  @apply text-gray-500 font-medium px-2 border-b-2 pb-2 border-transparent;
 }
 
 .menu a.active {
   color: var(--primary-color);
-  border-color: var(--primary-color)
+  border-color: var(--primary-color);
 }
 
 button {
@@ -159,13 +159,17 @@ button.btn-purple:hover {
   @apply bg-purple-800 text-white border-transparent;
 }
 
+.modal-content-container {
+}
+
 @media print {
   @page {
     margin: 0;
-    position: relative; 
+    position: relative;
     size: auto;
   }
-  body, html {
+  body,
+  html {
     background: white;
     height: auto;
     min-height: unset;
@@ -190,7 +194,47 @@ button.btn-purple:hover {
     text-align: center;
     font-size: 1.3rem;
   }
-  .no-print, .printable-content a, .printable-content button {
+  .no-print,
+  .printable-content a,
+  .printable-content button {
     display: none !important;
+  }
+}
+
+.modal-content-container {
+  transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.modal-content-container[data-state="open"] {
+  animation: animate-in 200ms ease-in-out forwards;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modal-content-container[data-state="closed"] {
+  animation: animate-out 200ms ease-in-out forwards;
+  opacity: 0;
+  transform: scale(0.90);
+}
+
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: scale(0.90);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes animate-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.90);
   }
 }
