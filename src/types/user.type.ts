@@ -20,7 +20,7 @@ export type EmployeeType = {
   id?: string;
   name: string;
   role: string;
-  status?: string;
+  status?: 'active' | 'inactive';
 };
 
 export type EmployeeStoreType = {

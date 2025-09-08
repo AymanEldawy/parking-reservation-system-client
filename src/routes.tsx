@@ -26,7 +26,6 @@ const routes: RouteObject[] = [
       { index: true, element: <Gates /> },
       {
         path: 'gates',
-        // element: <Gates />,
         children: [
           { path: ':id', element: <Zones /> }
         ],

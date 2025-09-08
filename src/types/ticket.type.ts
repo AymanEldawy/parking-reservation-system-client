@@ -3,7 +3,7 @@ export type TicketType = {
   type: "visitor" | "subscriber";
   zoneId: string;
   gateId: string;
-  checkinAt: string; // ISO timestamp
+  checkinAt: string;
   checkoutAt: string | null;
   subscriptionId?: string;
 };
@@ -22,6 +22,7 @@ export type ZoneStateType = {
   rateNormal: number;
   rateSpecial: number;
   open: boolean;
+  activeRate: "normal" | "special";
 };
 
 export type CheckinResponseType = {
@@ -47,4 +48,3 @@ export type CheckoutResponseType = TicketType & {
   checkinAt: string;
   checkoutAt: string | null;
 };
-

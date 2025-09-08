@@ -48,7 +48,7 @@ const Login = () => {
           <p className="mt-2 text-center text-sm text-[var(--text-secondary)]">Sign in to manage your parking</p>
         </div>
         <div className="rounded-xl bg-white p-8 shadow-lg">
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} name="login-form">
             <div className="space-y-1.5">
               <label className="sr-only" htmlFor="username">Username</label>
               <input

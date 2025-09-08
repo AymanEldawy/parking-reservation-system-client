@@ -2,9 +2,8 @@ import ErrorMessage from '@/components/shared/ErrorMessage'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import QUERY_KEYS from '@/data/queryKays'
 import { AdminService } from '@/services/api'
-import type { ShortZoneType, ZoneType } from '@/types/zone.type'
+import type { ShortZoneType } from '@/types/zone.type'
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
 import { toast } from 'react-toastify'
 
 const ParkingStateReport = () => {
@@ -18,8 +17,6 @@ const ParkingStateReport = () => {
       return response;
     }
   })
-  console.log(data, 'data');
-
 
   return (
     <section>

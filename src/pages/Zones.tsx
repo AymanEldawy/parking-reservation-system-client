@@ -10,22 +10,20 @@ import { toast } from 'react-toastify';
 import { useZoneStore } from '@/store/zoneStore';
 import { TicketService } from '@/services/api';
 import GateHeader from '@/components/GateHeader';
-import { useQuery } from '@tanstack/react-query';
+import type { CheckinResponseType } from '@/types/ticket.type';
 
 const Zones = () => {
   const gateId = useParams().id;
+  const { updateZones, zones } = useZoneStore()
   const [selectedTab, setSelectedTab] = useState('visitors');
   const [selectedZone, setSelectedZone] = useState<ZoneType>();
-  const [ticketDetails, setTicketDetails] = useState();
-  const { updateZones, zones } = useZoneStore()
-  const onCloseTicket = () => setTicketDetails(undefined);
+  const [ticketDetails, setTicketDetails] = useState<CheckinResponseType>();
   const [connected, setConnected] = useState(false)
 
   useEffect(() => {
     ws.connect();
 
     const offOpen = ws.on("open", () => {
-      console.log('open');
       ws._send({
         type: 'subscribe',
         payload: { gateId }
@@ -33,18 +31,14 @@ const Zones = () => {
       setConnected(true)
     });
 
-    const offZone = ws.on("zone-update", (payload: ZoneType) => {
-      updateZones(payload)
-      console.log('called here', payload);
-
+    const offZone = ws.on("zone-update", (payload: unknown) => {
+      updateZones(payload as ZoneType)
     });
 
     const offClose = ws.on("close", () => {
-      console.log('close');
       setConnected(false)
     });
 
-    // cleanup
     return () => {
       offOpen();
       offClose();
@@ -52,7 +46,6 @@ const Zones = () => {
       ws.disconnect();
     };
   }, []);
-
 
   const checkIn = async () => {
     if (!selectedZone) return;
@@ -68,6 +61,8 @@ const Zones = () => {
       setTicketDetails(data);
     }
   }
+
+  const onCloseTicket = () => setTicketDetails(undefined);
 
   return (
     <>

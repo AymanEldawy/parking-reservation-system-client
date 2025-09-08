@@ -11,7 +11,6 @@ type RushWindowFormProps = {
 const RushWindowForm = () => {
   const { register, reset, handleSubmit, formState: { isDirty } } = useForm<RushWindowFormProps>();
   const onSubmit = async (data: RushWindowFormProps) => {
-    console.log(data, "data");
 
     if (!data.weekDay || !data.from || !data.to) {
       toast.error("Please fill all the fields");
@@ -24,7 +23,6 @@ const RushWindowForm = () => {
       return;
     }
     toast.success("Rush hour created successfully");
-    console.log(data);
     reset();
 
   }
