@@ -1,5 +1,4 @@
 import type { CarType } from '@/types/subscription.type'
-import React from 'react'
 
 const CarCard = ({ car, index }: { car: CarType, index: number }) => {
   return (

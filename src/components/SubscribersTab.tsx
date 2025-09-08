@@ -1,10 +1,9 @@
 import { SubscriptionService, TicketService } from '@/services/api';
-import type { SubscriptionFormType, SubscriptionType } from '@/types/subscription.type';
+import type { SubscriptionFormType } from '@/types/subscription.type';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import TicketModal from './TicketModal';
-import SubscriptionInfo from './SubscriptionInfo';
 import type { ZoneType } from '@/types/zone.type';
 
 const SubscribersTab = ({ gateId, zones }: { gateId: string | undefined, zones: ZoneType[] }) => {
@@ -14,7 +13,6 @@ const SubscribersTab = ({ gateId, zones }: { gateId: string | undefined, zones: 
     watch,
     formState: { isSubmitting },
   } = useForm<SubscriptionFormType>({});
-  const [subscription, setSubscription] = useState<SubscriptionType>();
   const [ticketDetails, setTicketDetails] = useState();
   const onCloseTicket = () => setTicketDetails(undefined);
 
@@ -24,7 +22,6 @@ const SubscribersTab = ({ gateId, zones }: { gateId: string | undefined, zones: 
       toast.error(data.message);
       return;
     }
-    setSubscription(data)
 
     if (!data.active) {
       toast.error('Subscription is not active');
@@ -51,7 +48,7 @@ const SubscribersTab = ({ gateId, zones }: { gateId: string | undefined, zones: 
   return (
     <>
       {ticketDetails ?
-        <TicketModal showCheckpointLink ticketDetails={ticketDetails} onClose={onCloseTicket} />
+        <TicketModal ticketDetails={ticketDetails} onClose={onCloseTicket} />
         : null}
       <div className="mt-8">
         <div

@@ -1,11 +1,9 @@
 import GateCard from "@/components/GateCard";
 import GateCardSkeleton from "@/components/GateCardSkeleton";
-import ErrorMessage from "@/components/shared/ErrorMessage";
 import QUERY_KEYS from "@/data/queryKays";
 import { MasterService } from "@/services/api";
 import type { GateType } from "@/types/gate.type";
 import { useQuery } from "@tanstack/react-query"
-
 
 const Gates = () => {
   const { isLoading, data: gates } = useQuery({

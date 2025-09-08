@@ -1,5 +1,4 @@
 import type { SubscriptionType } from '@/types/subscription.type'
-import React from 'react'
 import CarCard from './CarCard'
 import ErrorMessage from './shared/ErrorMessage'
 

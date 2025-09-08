@@ -1,6 +1,5 @@
 import type { CheckoutResponseType } from '@/types/ticket.type'
 import BreakdownsTable from './BreakdownsTable'
-import TicketInfo from './TicketInfo'
 import { Button } from './ui/button'
 import { SubscriptionService, TicketService } from '@/services/api'
 import { toast } from 'react-toastify'

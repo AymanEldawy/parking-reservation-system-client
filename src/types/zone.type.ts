@@ -25,6 +25,7 @@ export type ZoneType = {
   availableForVisitors: number;
   rateNormal: number;
   rateSpecial: number;
+  activeRate: "normal" | "special";
 };
 
 export type ZoneStoreType = {

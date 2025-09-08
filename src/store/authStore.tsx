@@ -12,9 +12,7 @@ export const useAuthStore = create<AuthStoreType>()(
       error: null,
       login: async (user: UserLoginType) => {
         const data = await AuthService.login(user);
-        if (data.status !== 'error')
-          console.log(data, 'data');
-          
+        if (data.status !== 'error')          
           set({ user: data.user, token: data.token });
         return data
       },
